@@ -1,0 +1,51 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run - Pipeline (Dask)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_pipeline.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "DASK_DISTRIBUTED__COMM__TIMEOUTS__connect": "60s",
+        "TOKENIZERS_PARALLELISM": "false"
+      }
+    },
+    {
+      "name": "Debug - FastAPI",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "api.main:app",
+        "--host", "0.0.0.0",
+        "--port", "8000",
+        "--reload"
+      ],
+      "jinja": true
+    },
+    {
+      "name": "Debug - Streamlit Dashboard",
+      "type": "python",
+      "request": "launch",
+      "module": "streamlit",
+      "args": [
+        "run",
+        "dashboards/streamlit_app/app.py",
+        "--server.port=8501"
+      ]
+    },
+    {
+      "name": "PyTest: current file",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "${file}"
+      ],
+      "justMyCode": true
+    }
+  ]
+}

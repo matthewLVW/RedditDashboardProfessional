@@ -1,0 +1,39 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Create venv & install",
+      "type": "shell",
+      "command": "python -m venv .venv && . .venv/bin/activate && pip install -U pip && pip install -r requirements.txt",
+      "problemMatcher": []
+    },
+    {
+      "label": "Black format",
+      "type": "shell",
+      "command": ". .venv/bin/activate && black .",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run tests",
+      "type": "shell",
+      "command": ". .venv/bin/activate && pytest -q",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Build Docker image",
+      "type": "shell",
+      "command": "docker build -t election-nlp:latest .",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Generate static plots",
+      "type": "shell",
+      "command": ". .venv/bin/activate && python scripts/generate_static_plots.py",
+      "problemMatcher": []
+    }
+  ]
+}

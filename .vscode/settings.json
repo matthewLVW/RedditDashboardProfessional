@@ -1,0 +1,25 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.formatting.provider": "black",
+  "python.linting.flake8Enabled": true,
+  "python.linting.mypyEnabled": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "editor.codeActionsOnSave": {
+      "source.organizeImports": "always",
+      "source.fixAll": "explicit"
+  },
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/.pytest_cache": true,
+    "data/raw": true,          // huge dumps
+    "data/parquet": true,
+    "**/embeddings": true
+  },
+  "terminal.integrated.env.windows": {
+    "PYTHONUTF8": "1"
+  },
+  "jupyter.jupyterServerType": "local",
+  // Streamlit auto-reload dampening so GPU stays cool
+  "streamlit.server.runOnSave": false
+}

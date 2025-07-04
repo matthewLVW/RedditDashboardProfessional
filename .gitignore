@@ -1,0 +1,83 @@
+###############################################################################
+#  Python
+###############################################################################
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual-env & Poetry venv
+.venv/
+.env/            # if you store venvs here
+# Pipenv
+Pipfile.lock
+# PyInstaller build output
+dist/
+build/
+
+###############################################################################
+#  Data / Models
+###############################################################################
+# Raw Reddit dumps (multi-GB)
+data/raw/
+# Intermediate & derived data
+data/parquet/
+data/parquet_clean/
+data/features/
+data/embeddings/
+# Keep readme placeholders
+!data/**/README.md
+
+# Model caches & weights
+*.pt
+*.pth
+*.bin
+*.h5
+hub/
+# HuggingFace / transformers cache
+~/.cache/huggingface/
+# spaCy models download dir
+~/.cache/spacy/
+
+###############################################################################
+#  Logs & runtime artefacts
+###############################################################################
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.swn
+*.coverage
+.cache/
+.pytest_cache/
+.ipynb_checkpoints/
+# Dask runtime
+dask-worker-space/
+
+###############################################################################
+#  Notebook output
+###############################################################################
+notebooks/**.ipynb
+!notebooks/template.ipynb   # keep a blank template if you like
+
+###############################################################################
+#  VS Code
+###############################################################################
+.vscode/*.db
+.vscode/*.history/          # local file history
+# (keep .vscode/settings.json etc. for workspace config)
+
+###############################################################################
+#  Docker / build
+###############################################################################
+*.tar
+*.tgz
+
+###############################################################################
+#  Secrets
+###############################################################################
+.env
+.env.*
+*.secret
+*.key
