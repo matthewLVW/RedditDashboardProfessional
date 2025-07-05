@@ -1,6 +1,7 @@
 # tests/test_polarization.py
 
 import numpy as np
+import pytest
 from nlp_core.polarization import js_divergence
 
 def test_js_divergence_simple():

@@ -38,7 +38,7 @@ class EmbeddingStore:
         # Create HNSW index
         self.index = faiss.IndexHNSWFlat(self.dimension, 32)
         self.index.hnsw.efConstruction = 200
-        self.index.add(embeddings)
+        self.index.add(embeddings)  # type: ignore
 
     def search(self, query: str, k: int = 5) -> List[int]:
         """
@@ -54,5 +54,5 @@ class EmbeddingStore:
         if self.index is None or self.model is None:
             raise RuntimeError("Index or model not initialized.")
         query_vec = self.model.encode([query], convert_to_numpy=True).astype('float32')
-        D, I = self.index.search(query_vec, k)
+        D, I = self.index.search(query_vec, k)  # type: ignore
         return I[0].tolist()

@@ -2,7 +2,8 @@
 
 import spacy
 from spacy.tokens import Doc
-from typing import List, Dict
+from spacy.attrs import POS
+from typing import List, Dict, Union
 
 # Load a transformer-backed English model for better performance on complex language
 try:
@@ -25,17 +26,17 @@ def analyze_text(doc: Doc) -> Dict:
         "num_tokens": len(doc),
         "num_sentences": len(list(doc.sents)),
         "entities": [ent.label_ for ent in doc.ents],
-        "pos_counts": doc.count_by(spacy.attrs.POS),
+        "pos_counts": doc.count_by(POS),
         "noun_chunks": [chunk.text for chunk in doc.noun_chunks]
     }
     return features
 
-def process_texts(texts: List[str]) -> List[Doc]:
+def process_texts(texts: Union[List[str], str]) -> List[Doc]:
     """
     Apply the spaCy pipeline to a list of texts.
 
     Args:
-        texts (List[str]): List of input strings.
+        texts (List[str] or str): List of input strings.
 
     Returns:
         List[Doc]: List of spaCy Doc objects.

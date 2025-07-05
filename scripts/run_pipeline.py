@@ -75,7 +75,21 @@ def main():
     try:
         topics, probs = get_topics(texts)
         sample_df["topic"] = topics
-        sample_df["topic_confidence"] = [float(p.max()) if p is not None else 0.0 for p in probs]
+        confidences = []
+        for p in probs:
+            if p is None:
+                confidences.append(0.0)
+            elif hasattr(p, 'max'):
+                try:
+                    confidences.append(float(p.max()))
+                except Exception:
+                    confidences.append(float(p))
+            else:
+                try:
+                    confidences.append(float(max(p)))
+                except Exception:
+                    confidences.append(float(p))
+        sample_df["topic_confidence"] = confidences
     except Exception as e:
         print(f"Topic modeling failed: {e}")
 

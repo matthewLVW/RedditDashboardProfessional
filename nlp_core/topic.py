@@ -1,47 +1,51 @@
-# nlp_core/topic.py
-
 from bertopic import BERTopic
 from sentence_transformers import SentenceTransformer
-from typing import List, Tuple
+from typing import List, Any, Optional, Tuple
+from collections.abc import Mapping
 
-# Initialize embedding model
+embed_model = SentenceTransformer("all-MiniLM-L6-v2")
 try:
-    _embed_model = SentenceTransformer("all-MiniLM-L6-v2")
-except Exception:
-    _embed_model = None
+    _topic_model: BERTopic = BERTopic(verbose=False, embedding_model=embed_model)
+except Exception as e:
+    raise RuntimeError(f"BERTopic initialization failed: {e}") from e
 
-# Initialize BERTopic; dimensionality reduction and clustering under the hood
-try:
-    _topic_model = BERTopic(verbose=False, embedding_model=_embed_model)
-except Exception:
-    _topic_model = None
-
-def get_topics(docs: List[str]) -> Tuple[List[int], List[float]]:
-    """
-    Fit BERTopic on a batch of documents and return topic assignments and probabilities.
-
-    Args:
-        docs (List[str]): List of document texts.
-
-    Returns:
-        Tuple[List[int], List[float]]: (topics, probabilities) for each document.
-    """
-    if not docs or not _topic_model:
-        raise ValueError("No documents provided or BERTopic model unavailable.")
+def get_topics(docs: List[str]) -> Tuple[List[int], List[Any]]:
+    if not docs:
+        raise ValueError("No documents provided.")
     topics, probs = _topic_model.fit_transform(docs)
-    return topics, probs
+    topics_list = list(topics)
+    if probs is None:
+        probs_list = []
+    else:
+        try:
+            probs_list = probs.tolist()  # numpy/pandas
+        except Exception:
+            try:
+                probs_list = list(probs)  # generic iterable
+            except Exception:
+                probs_list = []
+    return topics_list, probs_list
 
-def extract_keywords(topic_model= _topic_model, top_n: int = 5) -> List[List[str]]:
-    """
-    Extract keywords for each topic.
-
-    Args:
-        topic_model (BERTopic): Trained BERTopic model.
-        top_n (int): Number of keywords per topic.
-
-    Returns:
-        List[List[str]]: Keywords for each topic.
-    """
-    if not topic_model:
+def extract_keywords(
+    topic_model: Optional[BERTopic] = _topic_model,
+    top_n: int = 5
+) -> List[List[str]]:
+    if topic_model is None:
         return []
-    return [topic_model.get_topic(topic) for topic in range(len(topic_model.get_topic_info())-1)]
+    info = topic_model.get_topic_info()
+    num = len(info) - 1 if len(info) > 0 else 0
+    results: List[List[str]] = []
+    for t in range(num):
+        data = topic_model.get_topic(t)
+        # Robust skip for weird outputs
+        if not data or data is True:
+            continue
+        # Always turn mapping into a list, else coerce to list for slicing
+        if isinstance(data, Mapping):
+            items = list(data.values())
+        else:
+            items = list(data)
+        sliced = items[:top_n]
+        keywords = [word for word, _ in sliced]
+        results.append(keywords)
+    return results
