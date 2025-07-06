@@ -4,7 +4,7 @@ import logging
 
 try:
     _sarcasm_pipeline = pipeline(
-        "text-classification", model="mrm8488/bert-tiny-finetuned-sarcasm-twitter"
+        "text-classification", model="mrm8488/t5-base-finetuned-sarcasm-twitter"
     )
 except Exception as e:
     logging.error(f"Could not load sarcasm model: {e}")

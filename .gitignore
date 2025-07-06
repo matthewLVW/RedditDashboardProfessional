@@ -81,3 +81,5 @@ notebooks/**.ipynb
 .env.*
 *.secret
 *.key
+election_subs_nov1-15.zst
+micro_comments.zst
